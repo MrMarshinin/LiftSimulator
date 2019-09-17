@@ -111,9 +111,9 @@ public class Lift extends Thread {
 
     private void removePassengers() {
         ArrayList<Passenger> passengersToInterrupt = new ArrayList<>();
-        for (int i = 0; i < passengersInside.size(); i++) {
-            if (passengersInside.get(i).getFinishFloor() == currentFloor) {
-                passengersToInterrupt.add(passengersInside.get(i));
+        for (Passenger value : passengersInside) {
+            if (value.getFinishFloor() == currentFloor) {
+                passengersToInterrupt.add(value);
             }
         }
 
