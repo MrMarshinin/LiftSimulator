@@ -69,11 +69,11 @@ public class Lift extends Thread {
     }
 
     public synchronized void addPassenger(Passenger passenger) throws OverweightException {
-        System.out.println("Add " + passenger.getWeight());
         passengersInside.add(passenger);
         if (!isAbleToMove()) {
             throw new OverweightException();
         }
+        System.out.println("Add " + passenger.getWeight());
     }
 
     private void waitForNewPassengers() throws InterruptedException {
@@ -104,31 +104,27 @@ public class Lift extends Thread {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        if (!currentFloor.isEmpty()){
+        if (!currentFloor.isEmpty()) {
             currentFloor.setNeedsLift(true);
         }
     }
 
     private void removePassengers() {
+        ArrayList<Passenger> passengersToInterrupt = new ArrayList<>();
         for (int i = 0; i < passengersInside.size(); i++) {
             if (passengersInside.get(i).getFinishFloor() == currentFloor) {
-                Passenger passengerToInterrupt = passengersInside.get(i);
-
-                int counter = 0;
-                System.out.println("Remove " + passengerToInterrupt.getWeight());
-                for (Passenger passenger : passengersInside) {
-                    if (passenger.getFinishFloor() == currentFloor && !passenger.equals(passengerToInterrupt)) {
-                        counter++;
-                    }
-                }
-                if (counter == 0) {
-                    floorsToStopForPassengersInside.remove(currentFloor);
-                }
-                passengersInside.remove(passengerToInterrupt);
-                passengerToInterrupt.interrupt();
+                passengersToInterrupt.add(passengersInside.get(i));
             }
         }
+
+        floorsToStopForPassengersInside.remove(currentFloor);
+
+        for (Passenger passenger : passengersToInterrupt) {
+            passengersInside.remove(passenger);
+            passenger.interrupt();
+        }
     }
+
 
     private void move(Floor nextFloor) throws NoNeedToMoveException {
         if (nextFloor == null) {
