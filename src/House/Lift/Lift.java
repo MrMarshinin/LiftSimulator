@@ -88,7 +88,7 @@ public class Lift extends Thread {
         }
     }
 
-    private Floor chooseNextFloorToStop() throws NoNeedToMoveException {
+    private synchronized Floor chooseNextFloorToStop() throws NoNeedToMoveException {
         if (isEmpty()) {
             return liftController.getNextFloorToStop();
         } else {
@@ -120,6 +120,7 @@ public class Lift extends Thread {
         floorsToStopForPassengersInside.remove(currentFloor);
 
         for (Passenger passenger : passengersToInterrupt) {
+            System.out.println("Remove " + passenger.getWeight());
             passengersInside.remove(passenger);
             passenger.interrupt();
         }
