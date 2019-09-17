@@ -45,4 +45,8 @@ public class Floor {
     public synchronized void setNeedsLift(boolean needsLift) {
         this.needsLift = needsLift;
     }
+
+    public boolean isEmpty(){
+        return waitingPassengers.isEmpty();
+    }
 }

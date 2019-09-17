@@ -104,6 +104,9 @@ public class Lift extends Thread {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        if (!currentFloor.isEmpty()){
+            currentFloor.setNeedsLift(true);
+        }
     }
 
     private void removePassengers() {
