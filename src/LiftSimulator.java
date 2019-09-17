@@ -8,7 +8,7 @@ public class LiftSimulator {
         Passenger[] passengers = new Passenger[25];
         for (int i = 0; i < 25; i++){
             try {
-                passengers[i] = new Passenger(i + 70, i / 2 + 1, 3);
+                passengers[i] = new Passenger(i + 70, i / 2 + 4, 3);
                 passengers[i].start();
             } catch (Exception e) {
                 e.printStackTrace();

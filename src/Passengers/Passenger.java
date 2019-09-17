@@ -22,6 +22,10 @@ public class Passenger extends Thread {
             throw new NoSuchFloorException();
         }
 
+        if (startFloor == finishFloor) {
+            throw new LiftIsNotNeededException();
+        }
+
         House house = House.getInstance();
 
         this.weight = weight;
