@@ -69,10 +69,10 @@ public class Lift extends Thread {
     }
 
     public synchronized void addPassenger(Passenger passenger) throws OverweightException {
-        passengersInside.add(passenger);
         if (!isAbleToMove()) {
             throw new OverweightException();
         }
+        passengersInside.add(passenger);
         System.out.println("Add " + passenger.getWeight());
     }
 
@@ -109,7 +109,8 @@ public class Lift extends Thread {
         }
     }
 
-    private void removePassengers() {
+    private synchronized void removePassengers() {
+        System.out.println("Weight " + getTotalWeight());
         ArrayList<Passenger> passengersToInterrupt = new ArrayList<>();
         for (Passenger value : passengersInside) {
             if (value.getFinishFloor() == currentFloor) {
