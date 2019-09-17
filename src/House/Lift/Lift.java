@@ -110,7 +110,6 @@ public class Lift extends Thread {
     }
 
     private synchronized void removePassengers() {
-        System.out.println("Weight " + getTotalWeight());
         ArrayList<Passenger> passengersToInterrupt = new ArrayList<>();
         for (Passenger value : passengersInside) {
             if (value.getFinishFloor() == currentFloor) {

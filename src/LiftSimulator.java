@@ -16,6 +16,7 @@ public class LiftSimulator {
         }
 
         for (int i = 0; i < 25; i++){
+            System.out.println(i + " joined");
             passengers[i].join();
         }
 
