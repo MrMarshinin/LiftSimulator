@@ -63,8 +63,7 @@ public class House {
 
     public void stopLifts() {
         for (int i = 0; i < numberOfLifts; i++){
-            lifts[i].stopLift();
-            System.out.println("Lift " + lifts[i]);
+            lifts[i].interrupt();
         }
     }
 }

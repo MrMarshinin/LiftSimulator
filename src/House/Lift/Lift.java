@@ -61,9 +61,10 @@ public class Lift extends Thread {
                 try {
                     waitForNewPassengers();
                 } catch (InterruptedException | LiftDoesNotWorkException ex) {
-                    System.out.println("Finished");
                     return;
                 }
+            } catch (InterruptedException e) {
+                return;
             }
         }
     }
@@ -76,7 +77,7 @@ public class Lift extends Thread {
     }
 
     private void waitForNewPassengers() throws InterruptedException, LiftDoesNotWorkException {
-        if (!isWorking){
+        if (!isWorking) {
             throw new LiftDoesNotWorkException();
         }
 
@@ -99,14 +100,10 @@ public class Lift extends Thread {
         }
     }
 
-    private void arrive(Floor floor) {
+    private void arrive(Floor floor) throws InterruptedException {
         removePassengers();
         floor.preparePassengers();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Thread.sleep(1000);
         if (!currentFloor.isEmpty()) {
             currentFloor.setNeedsLift(true);
         }
@@ -144,7 +141,6 @@ public class Lift extends Thread {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        arrive(currentFloor);
     }
 
     private void moveUp(Floor nextFloor) throws InterruptedException {
