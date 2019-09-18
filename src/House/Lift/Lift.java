@@ -65,7 +65,7 @@ public class Lift extends Thread {
                 }
             }
         }
-        Thread.currentThread().interrupt();
+        System.out.println("Finished");
     }
 
     public synchronized void addPassenger(Passenger passenger) throws OverweightException {

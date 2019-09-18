@@ -44,13 +44,13 @@ public class House {
 
     }
 
-    public Lift getLiftOnCurrentFloor(Floor floor) throws NullPointerException {
+    public Lift getLiftOnCurrentFloor(Floor floor) throws NoLiftOnCurrentFloorException {
         for (int i = 0; i < numberOfLifts; i++) {
             if (lifts[i].getCurrentFloor() == floor) {
                 return lifts[i];
             }
         }
-        return null;
+        throw new NoLiftOnCurrentFloorException();
     }
 
     public Floor getFloor(int numberOfFloor) {
