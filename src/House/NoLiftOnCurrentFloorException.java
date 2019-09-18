@@ -1,4 +1,4 @@
 package House;
 
-class NoLiftOnCurrentFloorException extends Exception {
+public class NoLiftOnCurrentFloorException extends Exception {
 }

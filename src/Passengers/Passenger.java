@@ -50,7 +50,12 @@ public class Passenger extends Thread {
     }
 
     private synchronized void enterLift() {
-        Lift lift = House.getInstance().getLiftOnCurrentFloor(startFloor);
+        Lift lift = null;
+        try {
+            lift = House.getInstance().getLiftOnCurrentFloor(startFloor);
+        } catch (NoLiftOnCurrentFloorException e) {
+            e.printStackTrace();
+        }
 
         try {
             lift.addPassenger(this);

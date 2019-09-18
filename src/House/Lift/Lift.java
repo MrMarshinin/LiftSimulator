@@ -53,19 +53,19 @@ public class Lift extends Thread {
     @Override
     public void run() {
         init();
-        while (isWorking) {
+        while (!isInterrupted()) {
             try {
                 arrive(currentFloor);
                 move(chooseNextFloorToStop());
             } catch (NoNeedToMoveException e) {
                 try {
                     waitForNewPassengers();
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
+                } catch (InterruptedException | LiftDoesNotWorkException ex) {
+                    System.out.println("Finished");
+                    return;
                 }
             }
         }
-        System.out.println("Finished");
     }
 
     public synchronized void addPassenger(Passenger passenger) throws OverweightException {
@@ -75,7 +75,11 @@ public class Lift extends Thread {
         passengersInside.add(passenger);
     }
 
-    private void waitForNewPassengers() throws InterruptedException {
+    private void waitForNewPassengers() throws InterruptedException, LiftDoesNotWorkException {
+        if (!isWorking){
+            throw new LiftDoesNotWorkException();
+        }
+
         while (true) {
             try {
                 chooseNextFloorToStop();
@@ -126,9 +130,11 @@ public class Lift extends Thread {
 
 
     private void move(Floor nextFloor) throws NoNeedToMoveException {
+
         if (nextFloor == null) {
             throw new NoNeedToMoveException();
         }
+
         try {
             if ((nextFloor.getNumber() > currentFloor.getNumber())) {
                 moveUp(nextFloor);

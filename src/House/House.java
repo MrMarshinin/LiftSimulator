@@ -31,7 +31,7 @@ public class House {
     }
 
     private House() {
-        this.numberOfLifts = 2;
+        this.numberOfLifts = 3;
         lifts = new Lift[numberOfLifts];
 
         for (int i = 0; i < NUMBER_OF_FLOORS; i++) {
@@ -62,8 +62,9 @@ public class House {
     }
 
     public void stopLifts() {
-        for (Lift lift : lifts){
-            lift.stopLift();
+        for (int i = 0; i < numberOfLifts; i++){
+            lifts[i].stopLift();
+            System.out.println("Lift " + lifts[i]);
         }
     }
 }
