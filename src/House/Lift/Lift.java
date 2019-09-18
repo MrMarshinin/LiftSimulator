@@ -73,7 +73,6 @@ public class Lift extends Thread {
             throw new OverweightException();
         }
         passengersInside.add(passenger);
-        System.out.println("Add " + passenger.getWeight());
     }
 
     private void waitForNewPassengers() throws InterruptedException {
@@ -120,7 +119,6 @@ public class Lift extends Thread {
         floorsToStopForPassengersInside.remove(currentFloor);
 
         for (Passenger passenger : passengersToInterrupt) {
-            System.out.println("Remove " + passenger.getWeight());
             passengersInside.remove(passenger);
             passenger.interrupt();
         }
@@ -140,6 +138,7 @@ public class Lift extends Thread {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        arrive(currentFloor);
     }
 
     private void moveUp(Floor nextFloor) throws InterruptedException {
