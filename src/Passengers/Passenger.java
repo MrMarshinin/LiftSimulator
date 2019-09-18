@@ -44,7 +44,7 @@ public class Passenger extends Thread {
 
     private void waitLift() throws InterruptedException {
         while (isWaiting) {
-            Thread.sleep(500);
+            Thread.sleep(50);
         }
         isWaiting = true;
     }
@@ -60,16 +60,19 @@ public class Passenger extends Thread {
         }
         lift.addStopFloor(finishFloor);
         startFloor.removeWaitingPassenger(this);
-        try {
-            waitLift();
-        } catch (InterruptedException e) {
-        }
     }
 
     @Override
     public void run() {
         callLift();
         enterLift();
+        while (!isInterrupted()){
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                return;
+            }
+        }
     }
 
     public int getWeight() {
