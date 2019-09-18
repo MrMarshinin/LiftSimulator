@@ -231,8 +231,4 @@ public class Lift extends Thread {
         }
 
     }
-
-    public void stopLift() {
-        isWorking = false;
-    }
 }
