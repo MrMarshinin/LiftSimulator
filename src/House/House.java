@@ -61,9 +61,9 @@ public class House {
         return liftController;
     }
 
-    public void stopLifts() {
+    public void interruptLifts() {
         for (int i = 0; i < numberOfLifts; i++){
-            lifts[i].interrupt();
+            lifts[i].cancel();
         }
     }
 }

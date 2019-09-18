@@ -13,7 +13,7 @@ public class Lift extends Thread {
     private ArrayList<Passenger> passengersInside;
     private LiftController liftController;
     private ArrayList<Floor> floorsToStopForPassengersInside;
-    private boolean isWorking = true;
+    private volatile boolean isCanceled;
 
     private boolean isAbleToMove() {
         return getTotalWeight() < maxWeight;
@@ -43,6 +43,7 @@ public class Lift extends Thread {
         this.maxWeight = maxWeight;
         this.secondsPerFloor = secondsPerFloor;
         this.floorsToStopForPassengersInside = new ArrayList<Floor>();
+        this.isCanceled = false;
     }
 
     private void init() {
@@ -53,20 +54,15 @@ public class Lift extends Thread {
     @Override
     public void run() {
         init();
-        while (!isInterrupted()) {
+        while (!isCanceled) {
             try {
                 arrive(currentFloor);
                 move(chooseNextFloorToStop());
             } catch (NoNeedToMoveException e) {
-                try {
-                    waitForNewPassengers();
-                } catch (InterruptedException | LiftDoesNotWorkException ex) {
-                    return;
-                }
-            } catch (InterruptedException e) {
-                return;
+                waitForNewPassengers();
             }
         }
+        System.out.println("Finished" + this);
     }
 
     public synchronized void addPassenger(Passenger passenger) throws OverweightException {
@@ -76,18 +72,18 @@ public class Lift extends Thread {
         passengersInside.add(passenger);
     }
 
-    private void waitForNewPassengers() throws InterruptedException, LiftDoesNotWorkException {
-        if (!isWorking) {
-            throw new LiftDoesNotWorkException();
-        }
-
-        while (true) {
+    private void waitForNewPassengers() {
+        while (!isCanceled) {
             try {
                 chooseNextFloorToStop();
                 break;
             } catch (NoNeedToMoveException e) {
-                arrive(currentFloor);
-                Thread.sleep(500);
+                try {
+                    arrive(currentFloor);
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    return;
+                }
             }
         }
     }
@@ -100,10 +96,14 @@ public class Lift extends Thread {
         }
     }
 
-    private void arrive(Floor floor) throws InterruptedException {
+    private void arrive(Floor floor) {
         removePassengers();
         floor.preparePassengers();
-        Thread.sleep(1000);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            return;
+        }
         if (!currentFloor.isEmpty()) {
             currentFloor.setNeedsLift(true);
         }
@@ -139,8 +139,9 @@ public class Lift extends Thread {
                 moveDown(nextFloor);
             }
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            return;
         }
+        arrive(currentFloor);
     }
 
     private void moveUp(Floor nextFloor) throws InterruptedException {
@@ -165,7 +166,6 @@ public class Lift extends Thread {
                 Thread.sleep(secondsPerFloor * 1000);
             }
         }
-        arrive(currentFloor);
     }
 
     private void setCurrentFloor(Floor currentFloor) {
@@ -230,5 +230,9 @@ public class Lift extends Thread {
             floorsToStopForPassengersInside.add(beginningSize - 1, floor);
         }
 
+    }
+
+    public void cancel() {
+        this.isCanceled = true;
     }
 }
