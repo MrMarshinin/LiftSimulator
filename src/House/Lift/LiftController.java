@@ -11,7 +11,6 @@ public class LiftController {
             for (int i = House.NUMBER_OF_FLOORS - 1; i > 0; i--) {
                 if (house.getFloor(i).getNeedsLift()) {
                     house.getFloor(i).setNeedsLift(false);
-                    System.out.println("Return floor number " + (i + 1));
                     return house.getFloor(i);
                 }
             }
