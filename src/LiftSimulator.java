@@ -3,18 +3,18 @@ import Passengers.Passenger;
 
 public class LiftSimulator {
 
-    public static boolean deliverPassengers(Passenger[] passengers){
-        for (int i = 0; i < passengers.length; i++){
+    static boolean willPassengersBeDelivered(Passenger[] passengers){
+        for (Passenger passenger : passengers) {
             try {
-                passengers[i].start();
+                passenger.start();
             } catch (Exception e) {
                 return false;
             }
         }
 
-        for (int i = 0; i < passengers.length; i++){
+        for (Passenger passenger : passengers) {
             try {
-                passengers[i].join();
+                passenger.join();
             } catch (InterruptedException e) {
                 return false;
             }
@@ -25,6 +25,6 @@ public class LiftSimulator {
         return true;
     }
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
     }
 }

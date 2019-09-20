@@ -65,7 +65,6 @@ public class Lift extends Thread {
                 waitForNewPassengers();
             }
         }
-        System.out.println("Finished" + this);
     }
 
     public synchronized void addPassenger(Passenger passenger) throws OverweightException {
