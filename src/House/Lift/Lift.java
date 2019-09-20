@@ -27,7 +27,10 @@ public class Lift extends Thread {
             }
         }
         return totalWeight;
+    }
 
+    public int getMaxWeight() {
+        return maxWeight;
     }
 
     public Floor getCurrentFloor() {

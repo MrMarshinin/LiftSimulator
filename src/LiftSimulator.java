@@ -3,25 +3,28 @@ import Passengers.Passenger;
 
 public class LiftSimulator {
 
-    public static void main(String[] args) throws InterruptedException {
-        House house = House.getInstance();
-        Passenger[] passengers = new Passenger[25];
-        for (int i = 0; i < 25; i++){
+    public static boolean deliverPassengers(Passenger[] passengers){
+        for (int i = 0; i < passengers.length; i++){
             try {
-                passengers[i] = new Passenger(i + 70, 3, i / 5 + 7);
                 passengers[i].start();
             } catch (Exception e) {
-                e.printStackTrace();
+                return false;
             }
         }
 
-        for (int i = 0; i < 25; i++){
-            System.out.println(i + " joined");
-            passengers[i].join();
+        for (int i = 0; i < passengers.length; i++){
+            try {
+                passengers[i].join();
+            } catch (InterruptedException e) {
+                return false;
+            }
         }
 
-        System.out.println("Успех!");
+        House.getInstance().cancelLifts();
 
-        house.interruptLifts();
+        return true;
+    }
+
+    public static void main(String[] args) throws InterruptedException {
     }
 }

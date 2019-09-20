@@ -61,8 +61,18 @@ public class House {
         return liftController;
     }
 
-    public void interruptLifts() {
-        for (int i = 0; i < numberOfLifts; i++){
+    public int getMaxWeight() {
+        int maxWeight = 0;
+        for (Lift lift : lifts) {
+            if (lift.getMaxWeight() > maxWeight) {
+                maxWeight = lift.getMaxWeight();
+            }
+        }
+        return maxWeight;
+    }
+
+    public void cancelLifts() {
+        for (int i = 0; i < numberOfLifts; i++) {
             lifts[i].cancel();
         }
     }

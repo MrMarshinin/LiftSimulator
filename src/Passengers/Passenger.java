@@ -26,6 +26,10 @@ public class Passenger extends Thread {
             throw new LiftIsNotNeededException();
         }
 
+        if(weight > House.getInstance().getMaxWeight()){
+            throw new TooFatForThisWorldException();
+        }
+
         House house = House.getInstance();
 
         this.weight = weight;
